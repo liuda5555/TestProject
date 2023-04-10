@@ -3,32 +3,28 @@ package org.testxml;
 import org.dom4j.DocumentFactory;
 import org.dom4j.Element;
 import org.dom4j.QName;
-import org.xml.sax.Locator;
+import org.dom4j.util.SingletonStrategy;
 
 public class MyDocumentFactory extends DocumentFactory {
-    private Locator locator;
+    private static SingletonStrategy<DocumentFactory> singleton = null;
 
-    public MyDocumentFactory(Locator locator){
+    public MyDocumentFactory(){
         super();
-        this.locator = locator;
     }
 
     @Override
     public Element createElement(QName qname) {
-        MyElement element = new MyElement(qname);
-        element.setLineNumber(this.locator.getLineNumber());
-        return element;
+        return new MyElement(qname);
     }
 
     @Override
     public Element createElement(String name) {
-        MyElement element = new MyElement(name);
-        element.setLineNumber(this.locator.getLineNumber());
-        return element;
+        return new MyElement(name);
     }
 
-    public void setLocator(Locator locator){
-        this.locator = locator;
+    @Override
+    public Element createElement(String qualifiedName, String namespaceURI) {
+        return createElement(createQName(qualifiedName, namespaceURI));
     }
 
 }

@@ -14,30 +14,36 @@ import org.xml.sax.SAXException;
 @Slf4j
 public class MySAXContentHandler extends SAXContentHandler {
 
-    private MyDocumentFactory myDocumentFactory = null;
+    private Locator locator;
 
     public MySAXContentHandler(DocumentFactory documentFactory, ElementHandler elementHandler) {
         super(documentFactory, elementHandler);
     }
 
-    public void setMyDocumentFactory(MyDocumentFactory myDocumentFactory) {
-        this.myDocumentFactory = myDocumentFactory;
-    }
-
     public void setDocumentLocator(Locator documentLocator) {
+        this.locator = documentLocator;
         super.setDocumentLocator(documentLocator);
-        if (myDocumentFactory != null) {
-            this.myDocumentFactory.setLocator(documentLocator);
-        }
     }
 
+
+
+    @Override
     public void startElement(String namespaceURI, String localName,
                              String qualifiedName, Attributes attributes) throws SAXException {
+        super.startElement(namespaceURI,localName,qualifiedName,attributes);
         ElementPath elementPath =  super.getElementStack();
         Element element = elementPath.getCurrent();
-//        log.debug("")
+        MyElement myElement = (MyElement) element;
+        myElement.setStartLineNumber(locator.getLineNumber());
+    }
 
-
+    @Override
+    public void endElement(String namespaceURI, String localName, String qName) throws SAXException {
+        ElementPath elementPath =  super.getElementStack();
+        Element element = elementPath.getCurrent();
+        MyElement myElement = (MyElement) element;
+        myElement.setEndLineNumber(locator.getLineNumber());
+        super.endElement(namespaceURI, localName, qName);
     }
 
 }

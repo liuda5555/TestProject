@@ -5,7 +5,8 @@ import org.dom4j.QName;
 import org.dom4j.tree.DefaultElement;
 
 public class MyElement extends DefaultElement {
-    private int lineNumber = 0;
+    private int startLineNumber = 0;
+    private int endLineNumber = 0;
     public MyElement(String name) {
         super(name);
     }
@@ -22,8 +23,20 @@ public class MyElement extends DefaultElement {
         super(name, namespace);
     }
 
-    public void setLineNumber(int lineNumber){
-        this.lineNumber = lineNumber;
+
+    public int getStartLineNumber() {
+        return startLineNumber;
     }
 
+    public void setStartLineNumber(int startLineNumber) {
+        this.startLineNumber = startLineNumber;
+    }
+
+    public int getEndLineNumber() {
+        return endLineNumber;
+    }
+
+    public void setEndLineNumber(int endLineNumber) {
+        this.endLineNumber = endLineNumber;
+    }
 }
